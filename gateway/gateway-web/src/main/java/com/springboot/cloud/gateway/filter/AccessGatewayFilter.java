@@ -1,6 +1,7 @@
 package com.springboot.cloud.gateway.filter;
 
 import com.springboot.cloud.auth.client.service.IAuthService;
+import com.springboot.cloud.common.core.entity.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class AccessGatewayFilter implements GlobalFilter {
     private Mono<Void> unauthorized(ServerWebExchange serverWebExchange) {
         serverWebExchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         DataBuffer buffer = serverWebExchange.getResponse()
-                .bufferFactory().wrap(HttpStatus.UNAUTHORIZED.getReasonPhrase().getBytes());
+                .bufferFactory().wrap(Result.fail(HttpStatus.UNAUTHORIZED).toString().getBytes());
         return serverWebExchange.getResponse().writeWith(Flux.just(buffer));
     }
 }
